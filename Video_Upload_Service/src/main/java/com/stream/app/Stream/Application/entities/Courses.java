@@ -1,10 +1,7 @@
 package com.stream.app.Stream.Application.entities;
 
-
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.util.*;
 
 @Data
 @AllArgsConstructor
