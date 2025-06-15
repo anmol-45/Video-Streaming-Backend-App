@@ -18,6 +18,7 @@ import java.util.Map;
 @Service
 public class VideoServiceImpl implements VideoService {
 
+    //config not added to git remoteg
     @Autowired
     private Cloudinary cloudinary;
 
