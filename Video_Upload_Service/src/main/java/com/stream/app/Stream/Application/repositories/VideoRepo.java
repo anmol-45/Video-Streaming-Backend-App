@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface videoRepo extends JpaRepository<Video, Long> {
+public interface VideoRepo extends JpaRepository<Video, Long> {
 
     Optional<Video> findByTitle(String s);
 }

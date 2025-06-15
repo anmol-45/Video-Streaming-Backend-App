@@ -1,91 +1,66 @@
 package com.stream.app.Stream.Application.services.videoServiceImpl;
 
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
 import com.stream.app.Stream.Application.entities.Video;
+import com.stream.app.Stream.Application.repositories.VideoRepo;
 import com.stream.app.Stream.Application.services.VideoService;
-import jakarta.annotation.PostConstruct;
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
+
 import java.io.IOException;
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class VideoServiceImpl implements VideoService {
 
-    //create the folder path
-    @Value("${video.files}")
-    String DIR;
+    @Autowired
+    private Cloudinary cloudinary;
 
-    @PostConstruct
-    public void init(){
-        File file = new File(DIR);
+    @Autowired
+    private VideoRepo videoRepo;
 
-        if(!file.exists()){
-            boolean mkdir = file.mkdir();
-
-            if(mkdir)
-                System.out.println("Folder created");
-        }
-
-    }
     @Override
     public String saveVideo(Video video, MultipartFile file) {
+        try {
+            Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.asMap(
+                    "resource_type", "video"  // very important for non-image files
+            ));
 
-
-        try{
-
-            String fileName = file.getOriginalFilename();
+            String url = (String) uploadResult.get("secure_url");
             String contentType = file.getContentType();
-            InputStream inputStream = file.getInputStream();
 
-            //create the file path including file name
-            assert fileName != null;
-            String cleanFilePath = StringUtils.cleanPath(fileName);
-
-            String cleanDir = StringUtils.cleanPath(DIR);
-
-            Path path = Paths.get(cleanDir, cleanFilePath);
-            System.out.println(path);
-
-
-            //save the video in local folder
-
-            Files.copy(inputStream , path , StandardCopyOption.REPLACE_EXISTING);
-
-            // save the meta data in db
-
+            video.setTitle(video.getTitle());
+            video.setDescription(video.getDescription());
             video.setContentType(contentType);
-            video.setFilePath(path.toString());
+            video.setFilePath(url); // cloud URL
 
-            //return the success message
+            videoRepo.save(video);
 
-            return "Video saved Successfully";
+            return "Video uploaded successfully to Cloudinary at URL: " + url;
+
         } catch (IOException e) {
             e.printStackTrace();
+            return "Video upload failed.";
         }
-        return "video unable to be saved";
     }
 
     @Override
     public Video getVideo(String title) {
-        return null;
+        return videoRepo.findByTitle(title).orElse(null);
     }
 
     @Override
     public List<Video> getAllVideos() {
-        return List.of();
+        return videoRepo.findAll();
     }
 
     @Override
     public Video getById(String id) {
-        return null;
+        return videoRepo.findById(Long.parseLong(id)).orElse(null);
     }
 }

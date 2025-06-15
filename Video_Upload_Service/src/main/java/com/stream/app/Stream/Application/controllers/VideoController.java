@@ -7,6 +7,8 @@ import com.stream.app.Stream.Application.services.videoServiceImpl.VideoServiceI
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/v1/videos")
 public class VideoController {
@@ -18,16 +20,30 @@ public class VideoController {
     }
 
     @PostMapping
-    public String SaveVideos(   //while using param body will not be accepted
-                                // as multipart file divides on the basis of file and
-                                // text while request body excepts only single json
-                             @RequestParam("file")MultipartFile file,
-                                @RequestParam("title")String title,
-                                @RequestParam("description")String description){
+    public String SaveVideos(@RequestParam("file") MultipartFile file,
+                             @RequestParam("title") String title,
+                             @RequestParam("description") String description) {
 
         Video video = new Video();
+        video.setTitle(title);
+        video.setDescription(description);
 
-        return videoService.saveVideo(video , file);
-
+        return videoService.saveVideo(video, file);
     }
+
+    @GetMapping
+    public List<Video> getAllVideos() {
+        return videoService.getAllVideos();
+    }
+
+    @GetMapping("/search/{title}")
+    public Video getVideoByTitle(@PathVariable String title) {
+        return videoService.getVideo(title);
+    }
+
+    @GetMapping("/{id}")
+    public Video getVideoById(@PathVariable String id) {
+        return videoService.getById(id);
+    }
+
 }
