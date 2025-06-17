@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="960716d9-f059-43ef-a02c-e469e06a2c4c" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/pom.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/StreamApplication.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/configFile/Config.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/controllers/VideoController.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/dto/VideoDto.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/entities/Courses.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/entities/Video.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/payload/CustomMessage.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/repositories/VideoRepo.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/services/VideoService.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/java/com/stream/app/services/videoServiceImpl/VideoServiceImpl.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/video-upload/src/main/resources/application.properties" afterDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectColorInfo">{
+  &quot;customColor&quot;: &quot;&quot;,
+  &quot;associatedIndex&quot;: 4
+}</component>
+  <component name="ProjectId" id="2yeQkFIxCa40dbNxv1VjW0EKQKs" />
+  <component name="ProjectLevelVcsManager">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Application.StreamApplication.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/KIIT/Desktop/stream-app/video-upload/src/main/resources&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.0&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.0&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.projectsettings.compiler.annotationProcessors&quot;
+  }
+}</component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\KIIT\Desktop\stream-app\video-upload\src\main\resources" />
+      <recent name="C:\Users\KIIT\Desktop\stream-app\video-upload\src\main\java\com\stream\app" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration default="true" type="JetRunConfigurationType">
+      <module name="Video-Streaming-Backend-App" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
+      <module name="Video-Streaming-Backend-App" />
+      <option name="filePath" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="960716d9-f059-43ef-a02c-e469e06a2c4c" name="Changes" comment="" />
+      <created>1750192701309</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1750192701309</updated>
+    </task>
+    <servers />
+  </component>
+</project>
