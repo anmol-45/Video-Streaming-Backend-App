@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/Stream-Application.iml" filepath="$PROJECT_DIR$/.idea/Stream-Application.iml" />
+      <module fileurl="file://$PROJECT_DIR$/video-upload/Stream-Application.iml" filepath="$PROJECT_DIR$/video-upload/Stream-Application.iml" />
     </modules>
   </component>
 </project>
