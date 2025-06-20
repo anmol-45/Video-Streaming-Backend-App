@@ -1,4 +1,3 @@
-
 # 🔐 Secure User Authentication and Authorization System
 
 ## **Overview**
@@ -55,8 +54,8 @@ This project implements a robust authentication and authorization system in a Sp
 
 **Flow:**
 
-1. Frontend (React/Vite) uses Google Sign-In SDK  
-2. It receives a **Google ID token**  
+1. Frontend (React/Vite) uses Google Sign-In SDK
+2. It receives a **Google ID token**
 3. Sends it to `/api/v1/auth/google`:
    ```json
    {
@@ -90,18 +89,93 @@ Controller annotation:
 ```java
 @PreAuthorize("hasRole('ADMIN')")
 @GetMapping("/admin/dashboard")
-public String adminPanel() { ... }
+public String adminPanel() {  }
 ```
 
 Security config:
 
 ```java
-.authorizeHttpRequests(auth -> auth
+http.authorizeHttpRequests(auth -> auth
+    .requestMatchers("/api/v1/auth/**").permitAll()
     .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
     .requestMatchers("/api/v1/teacher/**").hasAnyRole("TEACHER", "ADMIN")
     .requestMatchers("/api/v1/student/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
-)
+    .anyRequest().authenticated()
+);
 ```
+
+---
+
+## **🔄 Custom JWT Filter Chain**
+
+A custom `JwtAuthFilter` is registered before `UsernamePasswordAuthenticationFilter` to:
+
+- Extract the Bearer token from the Authorization header
+- Parse and validate the JWT using RSA public key
+- If valid, set `SecurityContextHolder` with user details
+
+➡️ Enables downstream access via:
+
+```java
+Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+String email = auth.getName();
+```
+
+This makes the user identity available across the request lifecycle.
+
+---
+
+## **🪙 JWT Claims Structure**
+
+```json
+{
+  "sub": "user@gmail.com",
+  "roles": ["ROLE_STUDENT"],
+  "iat": 1718600000,
+  "exp": 1718603600
+}
+```
+
+---
+
+## **🧱 Microservice Compatibility**
+
+This module is designed with a microservice-first mindset:
+
+- Stateless session management with JWT (no server-side session needed)
+- Easily integrable with **Spring Cloud Gateway**, **Eureka Server**, and **Config Server**
+- Google Sign-In as identity provider for unified SSO across services
+- Role-based access ensures minimal endpoint exposure across services
+
+---
+
+## **📊 Role-Based Endpoint Access Table**
+
+| Endpoint Pattern       | Method         | Roles Allowed           |
+|------------------------|----------------|--------------------------|
+| `/api/v1/student/**`   | GET            | STUDENT, TEACHER, ADMIN |
+| `/api/v1/teacher/**`   | POST, PUT      | TEACHER, ADMIN          |
+| `/api/v1/admin/**`     | GET, POST, DEL | ADMIN only              |
+
+---
+
+## **⚙️ Role Enforcement Strategies**
+
+Role-based authorization is enforced using:
+
+- **Annotations**:
+  ```java
+  @PreAuthorize("hasRole('ADMIN')")
+  ```
+
+- **HTTP Security Configuration**:
+  ```java
+  .authorizeHttpRequests(auth -> auth
+      .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+  )
+  ```
+
+This double layer of protection ensures secure access control at both the method and request levels.
 
 ---
 
@@ -125,32 +199,19 @@ src/
 ```java
 @Bean
 public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-    return http
-        .csrf(AbstractHttpConfigurer::disable)
-        .authorizeHttpRequests(auth -> auth
-            .requestMatchers("/api/v1/auth/**").permitAll()
-            .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
-            .requestMatchers("/api/v1/teacher/**").hasAnyRole("TEACHER", "ADMIN")
-            .requestMatchers("/api/v1/student/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
-            .anyRequest().authenticated()
-        )
-        .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-        .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
-        .authenticationProvider(authenticationProvider)
-        .build();
-}
-```
-
----
-
-## **🪙 JWT Claims Structure**
-
-```json
-{
-  "sub": "user@gmail.com",
-  "roles": ["ROLE_STUDENT"],
-  "iat": 1718600000,
-  "exp": 1718603600
+   return http
+           .csrf(AbstractHttpConfigurer::disable)
+           .authorizeHttpRequests(auth -> auth
+                   .requestMatchers("/api/v1/auth/**").permitAll()
+                   .requestMatchers("/api/v1/admin/**").hasRole("ADMIN")
+                   .requestMatchers("/api/v1/teacher/**").hasAnyRole("TEACHER", "ADMIN")
+                   .requestMatchers("/api/v1/student/**").hasAnyRole("STUDENT", "TEACHER", "ADMIN")
+                   .anyRequest().authenticated()
+           )
+           .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+           .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+           .authenticationProvider(authenticationProvider)
+           .build();
 }
 ```
 
@@ -162,15 +223,15 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 
 ```xml
 <dependency>
-    <groupId>io.jsonwebtoken</groupId>
-    <artifactId>jjwt</artifactId>
-    <version>0.11.5</version>
+   <groupId>io.jsonwebtoken</groupId>
+   <artifactId>jjwt</artifactId>
+   <version>0.11.5</version>
 </dependency>
 
 <dependency>
-    <groupId>com.google.api-client</groupId>
-    <artifactId>google-api-client</artifactId>
-    <version>2.2.0</version>
+<groupId>com.google.api-client</groupId>
+<artifactId>google-api-client</artifactId>
+<version>2.2.0</version>
 </dependency>
 ```
 
@@ -182,7 +243,10 @@ public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Excepti
 server.port=8082
 
 # JWT
-app.jwt.secret=your-256-bit-secret
+# RSA Key paths
+jwt.private.key.path=classpath:private_key.pem
+jwt.public.key.path=classpath:public_key.pem
+
 app.jwt.expiration=3600000
 
 # Logging
@@ -218,7 +282,7 @@ logging.level.org.springframework.security=DEBUG
 
 ## **✨ Future Improvements**
 
-- ✅ Refresh token support  
-- ✅ Password reset  
-- ✅ Email verification  
+- ✅ Refresh token support
+- ✅ Password reset
+- ✅ Email verification
 - ✅ Logout + token revocation
