@@ -13,6 +13,7 @@ import lombok.NonNull;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -66,8 +67,13 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 //User exists and Roles match.
                 if (user != null && user.getRole().equalsIgnoreCase(role)){
 
-                    //Downstream access ti logged-in User's identity
-                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(email, null, List.of());
+                    //Downstream access to logged-in User's identity
+//                    setting the security details for securityContextHolder
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            email,
+                            null,
+                            List.of(new SimpleGrantedAuthority("ROLE_" + role.toUpperCase()))
+                    );
                     SecurityContextHolder.getContext().setAuthentication(authentication);
 
                     //Allow the Request to proceed
